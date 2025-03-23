@@ -8,15 +8,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const graphql_1 = require("@nestjs/graphql");
+const apollo_1 = require("@nestjs/apollo");
+const gateway_1 = require("@apollo/gateway");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
-        controllers: [app_controller_1.AppController],
+        imports: [
+            graphql_1.GraphQLModule.forRoot({
+                driver: apollo_1.ApolloGatewayDriver,
+                gateway: {
+                    supergraphSdl: new gateway_1.IntrospectAndCompose({
+                        subgraphs: []
+                    })
+                }
+            })
+        ],
+        controllers: [],
         providers: [app_service_1.AppService],
     })
 ], AppModule);
