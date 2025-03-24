@@ -1,33 +1,55 @@
 import { LoginDto, RegisterDto } from "./dto/user.dto";
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { User } from "./entities/user.entity";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "prisma/Prisma.service";
 import { ConfigService } from "@nestjs/config";
+import * as bcrypt from "bcrypt";
 
+interface UserData {
+  name: string;
+  email: string;
+  password: string;
+  phone_number: number;
+}
 @Injectable()
 export class UsersService {
   constructor(
     private jwtService: JwtService,
     private prisma: PrismaService,
-    private config: ConfigService,
+    private configService: ConfigService,
   ) {}
 
   async register(registerDto: RegisterDto, response: Response) {
-    const { name, password, email } = registerDto;
-    const user = {
-      name,
-      email,
-      password,
-    };
-    await this.prisma.user.create({
-      data: {
-        name,
+    const { name, password, email, phone_number } = registerDto;
+
+    const isEmailExist = await this.prisma.user.findUnique({
+      where: {
         email,
-        password,
       },
     });
-    return user;
+    const isPhoneNumberExist = await this.prisma.user.findUnique({
+      where: {
+        phone_number: phone_number,
+      },
+    });
+    if (isEmailExist) {
+      throw new BadRequestException("user already exists");
+    }
+    if (isPhoneNumberExist) {
+      throw new BadRequestException("phone number already exists");
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = {
+      name: name,
+      email: email,
+      password: hashedPassword,
+      phone_number: phone_number,
+    };
+
+    const activationToken = await this.createAvtivationToken(user);
+    const activationCode = activationToken.activationCode;
+    return { user, response };
   }
   async login(loginDto: LoginDto) {
     const { password, email } = loginDto;
@@ -40,5 +62,19 @@ export class UsersService {
 
   async getUsers(): Promise<User[]> {
     return this.prisma.user.findMany();
+  }
+  createAvtivationToken(user: UserData) {
+    const activationCode = Math.floor(1000 + Math.random() + 9000).toString();
+    const token = this.jwtService.sign(
+      {
+        user,
+        activationCode,
+      },
+      {
+        secret: this.configService.get<string>("ACTIVATION_SECRET"),
+        expiresIn: "5m",
+      },
+    );
+    return { token, activationCode };
   }
 }

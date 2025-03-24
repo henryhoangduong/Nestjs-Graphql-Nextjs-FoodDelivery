@@ -11,6 +11,7 @@ import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "prisma/Prisma.service";
 import { UserResolvers } from "./user.resolver";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+import { EmailModule } from "./email/email.module";
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
@@ -20,6 +21,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
       autoSchemaFile: { federation: 2 },
       playground: false,
     }),
+    EmailModule,
   ],
   controllers: [],
   providers: [
