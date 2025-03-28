@@ -5,6 +5,7 @@ import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "prisma/Prisma.service";
 import { ConfigService } from "@nestjs/config";
 import * as bcrypt from "bcrypt";
+import { EmailService } from "./email/email.service";
 
 interface UserData {
   name: string;
@@ -18,6 +19,7 @@ export class UsersService {
     private jwtService: JwtService,
     private prisma: PrismaService,
     private configService: ConfigService,
+    private emailService: EmailService,
   ) {}
 
   async register(registerDto: RegisterDto, response: Response) {
@@ -49,6 +51,13 @@ export class UsersService {
 
     const activationToken = await this.createAvtivationToken(user);
     const activationCode = activationToken.activationCode;
+    await this.emailService.sendEmail({
+      email,
+      subject: "Activate your account",
+      template: "./activation-mail",
+      name,
+      activationCode,
+    });
     return { user, response };
   }
   async login(loginDto: LoginDto) {

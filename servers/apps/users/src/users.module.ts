@@ -1,12 +1,11 @@
 import { Module } from "@nestjs/common";
-import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
 } from "@nestjs/apollo";
-import { ConfigService } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "prisma/Prisma.service";
 import { UserResolvers } from "./user.resolver";
@@ -14,6 +13,10 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
 import { EmailModule } from "./email/email.module";
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath:[".env"]
+    }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
@@ -23,7 +26,6 @@ import { EmailModule } from "./email/email.module";
     }),
     EmailModule,
   ],
-  controllers: [],
   providers: [
     UsersService,
     ConfigService,
