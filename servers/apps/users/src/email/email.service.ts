@@ -12,8 +12,10 @@ type mailOptions = {
 
 @Injectable()
 export class EmailService {
-    constructor(private mailService: MailerService, config:ConfigService) {
-  }
+  constructor(
+    private mailService: MailerService,
+    config: ConfigService,
+  ) {}
   async sendEmail({
     subject,
     email,

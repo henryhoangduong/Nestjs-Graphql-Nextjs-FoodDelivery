@@ -31,8 +31,8 @@ let RegisterResponse = class RegisterResponse {
 exports.RegisterResponse = RegisterResponse;
 __decorate([
     (0, graphql_1.Field)(() => user_entity_1.User, { nullable: true }),
-    __metadata("design:type", Object)
-], RegisterResponse.prototype, "user", void 0);
+    __metadata("design:type", String)
+], RegisterResponse.prototype, "activation_token", void 0);
 __decorate([
     (0, graphql_1.Field)(() => ErrorType, { nullable: true }),
     __metadata("design:type", ErrorType)

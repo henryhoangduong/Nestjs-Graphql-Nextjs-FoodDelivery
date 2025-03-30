@@ -13,7 +13,7 @@ export class ErrorType {
 @ObjectType()
 export class RegisterResponse {
   @Field(() => User, { nullable: true })
-  user?: User | any;
+  activation_token: string;
 
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;

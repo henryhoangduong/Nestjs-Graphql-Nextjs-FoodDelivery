@@ -25,16 +25,19 @@ let UsersService = class UsersService {
     }
     async register(registerDto, response) {
         const { name, password, email, phone_number } = registerDto;
-        const isEmailExist = await this.prisma.user.findUnique({
+        console.log(registerDto);
+        const isEmailExist = await this.prisma.user.findFirst({
             where: {
                 email,
             },
         });
+        console.log("isEmailExist: ", isEmailExist);
         const isPhoneNumberExist = await this.prisma.user.findUnique({
             where: {
                 phone_number: phone_number,
             },
         });
+        console.log(isPhoneNumberExist);
         if (isEmailExist) {
             throw new common_1.BadRequestException("user already exists");
         }
@@ -57,6 +60,33 @@ let UsersService = class UsersService {
             name,
             activationCode,
         });
+        return { activationToken, response };
+    }
+    async activateUser(activationDto, response) {
+        const { activationToken, activationCode } = activationDto;
+        const newUser = this.jwtService.verify(activationToken, {
+            secret: this.configService.get("ACTIVATION_SECRET"),
+        });
+        if (newUser.activationCode !== activationCode) {
+            throw new common_1.BadRequestException("Invalid activation code");
+        }
+        const { name, email, password, phone_number } = newUser.user;
+        const existUser = await this.prisma.user.findUnique({
+            where: {
+                email: email,
+            },
+        });
+        if (existUser) {
+            throw new common_1.BadRequestException("User already exists");
+        }
+        const user = await this.prisma.user.create({
+            data: {
+                name,
+                email,
+                password,
+                phone_number,
+            },
+        });
         return { user, response };
     }
     async login(loginDto) {
@@ -70,7 +100,7 @@ let UsersService = class UsersService {
     async getUsers() {
         return this.prisma.user.findMany();
     }
-    createAvtivationToken(user) {
+    async createAvtivationToken(user) {
         const activationCode = Math.floor(1000 + Math.random() + 9000).toString();
         const token = this.jwtService.sign({
             user,

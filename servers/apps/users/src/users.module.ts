@@ -15,7 +15,7 @@ import { EmailModule } from "./email/email.module";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath:[".env"]
+      envFilePath: [".env"],
     }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginDto = exports.RegisterDto = void 0;
+exports.ActivationDto = exports.LoginDto = exports.RegisterDto = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const class_validator_1 = require("class-validator");
 let RegisterDto = class RegisterDto {
@@ -59,4 +59,20 @@ __decorate([
 exports.LoginDto = LoginDto = __decorate([
     (0, graphql_1.InputType)()
 ], LoginDto);
+let ActivationDto = class ActivationDto {
+};
+exports.ActivationDto = ActivationDto;
+__decorate([
+    (0, graphql_1.Field)(),
+    (0, class_validator_1.IsNotEmpty)({ message: "Activation Token is required" }),
+    __metadata("design:type", String)
+], ActivationDto.prototype, "activationToken", void 0);
+__decorate([
+    (0, graphql_1.Field)(),
+    (0, class_validator_1.IsNotEmpty)({ message: "Activation Code is required" }),
+    __metadata("design:type", String)
+], ActivationDto.prototype, "activationCode", void 0);
+exports.ActivationDto = ActivationDto = __decorate([
+    (0, graphql_1.InputType)()
+], ActivationDto);
 //# sourceMappingURL=user.dto.js.map

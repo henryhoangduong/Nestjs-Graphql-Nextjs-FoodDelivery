@@ -27,8 +27,10 @@ let UserResolvers = class UserResolvers {
         if (!registerDto.email || !registerDto.name || !registerDto.password) {
             throw new common_1.BadGatewayException("Please fill in all fields");
         }
-        const user = await this.userService.register(registerDto, context.res);
-        return { user };
+        console.log(registerDto);
+        const { activationToken } = await this.userService.register(registerDto, context.res);
+        console.log(activationToken);
+        return { activation_token: activationToken.activationCode };
     }
     async getUsers() {
         return this.userService.getUsers();

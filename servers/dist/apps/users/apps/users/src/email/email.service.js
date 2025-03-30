@@ -32,6 +32,7 @@ let EmailService = class EmailService {
 exports.EmailService = EmailService;
 exports.EmailService = EmailService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [mailer_1.MailerService, config_1.ConfigService])
+    __metadata("design:paramtypes", [mailer_1.MailerService,
+        config_1.ConfigService])
 ], EmailService);
 //# sourceMappingURL=email.service.js.map

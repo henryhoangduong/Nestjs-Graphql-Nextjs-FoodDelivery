@@ -25,7 +25,7 @@ exports.UsersModule = UsersModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-                envFilePath: [".env"]
+                envFilePath: [".env"],
             }),
             graphql_1.GraphQLModule.forRoot({
                 driver: apollo_1.ApolloFederationDriver,
