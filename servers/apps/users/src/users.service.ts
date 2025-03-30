@@ -24,19 +24,16 @@ export class UsersService {
 
   async register(registerDto: RegisterDto, response: Response) {
     const { name, password, email, phone_number } = registerDto;
-    console.log(registerDto)
     const isEmailExist = await this.prisma.user.findFirst({
       where: {
         email,
       },
     });
-    console.log("isEmailExist: ",isEmailExist)
     const isPhoneNumberExist = await this.prisma.user.findUnique({
       where: {
         phone_number: phone_number,
       },
     });
-    console.log(isPhoneNumberExist)
     if (isEmailExist) {
       throw new BadRequestException("user already exists");
     }
@@ -90,6 +87,7 @@ export class UsersService {
     });
     return { user, response };
   }
+  
   async login(loginDto: LoginDto) {
     const { password, email } = loginDto;
     const user = {
@@ -103,7 +101,7 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
   async createAvtivationToken(user: UserData) {
-    const activationCode = Math.floor(1000 + Math.random() + 9000).toString();
+    const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
     const token = this.jwtService.sign(
       {
         user,

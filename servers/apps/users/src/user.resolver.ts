@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Resolver, Query } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
-import { LoginResponse, RegisterResponse } from "./types/user.type";
+import { ActivationResponse, RegisterResponse } from "./types/user.type";
 import { User } from "./entities/user.entity";
 import { ActivationDto, RegisterDto } from "./dto/user.dto";
 import { BadGatewayException } from "@nestjs/common";
@@ -17,25 +17,24 @@ export class UserResolvers {
     if (!registerDto.email || !registerDto.name || !registerDto.password) {
       throw new BadGatewayException("Please fill in all fields");
     }
-    console.log(registerDto)
-    const { activationToken } = await this.userService.register(
+    const {activationToken} = await this.userService.register(
       registerDto,
       context.res,
     );
-    console.log(activationToken)
-    return {activation_token:activationToken.activationCode};
+    return {activation_token:activationToken.token};
   }
-  // @Mutation(() => RegisterResponse)
-  // async activateUser(
-  //   @Args("activationInput") activationDto: ActivationDto,
-  //   @Context() context: { res: Response },
-  // ): Promise<RegisterResponse> {
-  //   const user = await this.userService.activateUser(
-  //     activationDto,
-  //     context.res,
-  //   );
-  //   return { user };
-  // }
+  @Mutation(() => ActivationResponse)
+  async activateUser(
+    @Args("activationInput") activationDto: ActivationDto,
+    @Context() context: { res: Response },
+  ): Promise<ActivationResponse> {
+    const user = await this.userService.activateUser(
+      activationDto,
+      context.res,
+    );
+    return { user };
+  }
+
   @Query(() => [User])
   async getUsers() {
     return this.userService.getUsers();

@@ -27,10 +27,12 @@ let UserResolvers = class UserResolvers {
         if (!registerDto.email || !registerDto.name || !registerDto.password) {
             throw new common_1.BadGatewayException("Please fill in all fields");
         }
-        console.log(registerDto);
         const { activationToken } = await this.userService.register(registerDto, context.res);
-        console.log(activationToken);
-        return { activation_token: activationToken.activationCode };
+        return { activation_token: activationToken.token };
+    }
+    async activateUser(activationDto, context) {
+        const user = await this.userService.activateUser(activationDto, context.res);
+        return { user };
     }
     async getUsers() {
         return this.userService.getUsers();
@@ -45,6 +47,14 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.RegisterDto, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolvers.prototype, "register", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => user_type_1.ActivationResponse),
+    __param(0, (0, graphql_1.Args)("activationInput")),
+    __param(1, (0, graphql_1.Context)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.ActivationDto, Object]),
+    __metadata("design:returntype", Promise)
+], UserResolvers.prototype, "activateUser", null);
 __decorate([
     (0, graphql_1.Query)(() => [user_entity_1.User]),
     __metadata("design:type", Function),

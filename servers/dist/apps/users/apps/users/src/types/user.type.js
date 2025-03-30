@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginResponse = exports.RegisterResponse = exports.ErrorType = void 0;
+exports.ActivationResponse = exports.LoginResponse = exports.RegisterResponse = exports.ErrorType = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const user_entity_1 = require("../entities/user.entity");
 let ErrorType = class ErrorType {
@@ -30,7 +30,7 @@ let RegisterResponse = class RegisterResponse {
 };
 exports.RegisterResponse = RegisterResponse;
 __decorate([
-    (0, graphql_1.Field)(() => user_entity_1.User, { nullable: true }),
+    (0, graphql_1.Field)(),
     __metadata("design:type", String)
 ], RegisterResponse.prototype, "activation_token", void 0);
 __decorate([
@@ -54,4 +54,18 @@ __decorate([
 exports.LoginResponse = LoginResponse = __decorate([
     (0, graphql_1.ObjectType)()
 ], LoginResponse);
+let ActivationResponse = class ActivationResponse {
+};
+exports.ActivationResponse = ActivationResponse;
+__decorate([
+    (0, graphql_1.Field)(() => user_entity_1.User, { nullable: true }),
+    __metadata("design:type", Object)
+], ActivationResponse.prototype, "user", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => ErrorType, { nullable: true }),
+    __metadata("design:type", ErrorType)
+], ActivationResponse.prototype, "errorType", void 0);
+exports.ActivationResponse = ActivationResponse = __decorate([
+    (0, graphql_1.ObjectType)()
+], ActivationResponse);
 //# sourceMappingURL=user.type.js.map
