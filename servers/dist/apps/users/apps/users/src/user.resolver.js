@@ -34,6 +34,9 @@ let UserResolvers = class UserResolvers {
         const user = await this.userService.activateUser(activationDto, context.res);
         return { user: user.user };
     }
+    async Login(email, password) {
+        return await this.userService.login({ email, password });
+    }
     async getUsers() {
         return this.userService.getUsers();
     }
@@ -55,6 +58,14 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.ActivationDto, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolvers.prototype, "activateUser", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => user_type_1.LoginResponse),
+    __param(0, (0, graphql_1.Args)("email")),
+    __param(1, (0, graphql_1.Args)("password")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], UserResolvers.prototype, "Login", null);
 __decorate([
     (0, graphql_1.Query)(() => [user_entity_1.User]),
     __metadata("design:type", Function),

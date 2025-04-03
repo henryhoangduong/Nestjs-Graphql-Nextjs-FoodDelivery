@@ -6,6 +6,8 @@ import { PrismaService } from "prisma/Prisma.service";
 import { ConfigService } from "@nestjs/config";
 import * as bcrypt from "bcrypt";
 import { EmailService } from "./email/email.service";
+import { TokenSender } from "./utils/sendToken";
+import { LoginResponse } from "./types/user.type";
 
 interface UserData {
   name: string;
@@ -88,15 +90,33 @@ export class UsersService {
     return { user, response };
   }
 
-  async login(loginDto: LoginDto) {
-    const { password, email } = loginDto;
-    const user = {
-      email,
-      password,
-    };
-    return user;
+  async login(loginDto: LoginDto):Promise<LoginResponse> {
+    const { email, password } = loginDto;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (user && (await this.comparePassword(password, user.password))) {
+      const tokenSender = new TokenSender(this.configService, this.jwtService);
+      return tokenSender.sendToken(user);
+    } else {
+      return {
+        user: null,
+        accessToken: null,
+        refreshToken: null,
+        error: {
+          message:"Invalid email or password"
+        }
+      }
+    }
   }
-
+  async comparePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, hashedPassword);
+  }
   async getUsers(): Promise<User[]> {
     return this.prisma.user.findMany();
   }

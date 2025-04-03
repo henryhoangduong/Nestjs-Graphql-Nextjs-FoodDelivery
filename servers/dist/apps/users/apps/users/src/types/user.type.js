@@ -44,9 +44,17 @@ let LoginResponse = class LoginResponse {
 };
 exports.LoginResponse = LoginResponse;
 __decorate([
-    (0, graphql_1.Field)(() => user_entity_1.User, { nullable: true }),
+    (0, graphql_1.Field)(() => user_entity_1.User),
     __metadata("design:type", user_entity_1.User)
 ], LoginResponse.prototype, "user", void 0);
+__decorate([
+    (0, graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], LoginResponse.prototype, "accessToken", void 0);
+__decorate([
+    (0, graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], LoginResponse.prototype, "refreshToken", void 0);
 __decorate([
     (0, graphql_1.Field)(() => ErrorType, { nullable: true }),
     __metadata("design:type", ErrorType)

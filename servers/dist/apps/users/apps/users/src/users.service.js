@@ -16,6 +16,7 @@ const Prisma_service_1 = require("../../../prisma/Prisma.service");
 const config_1 = require("@nestjs/config");
 const bcrypt = require("bcrypt");
 const email_service_1 = require("./email/email.service");
+const sendToken_1 = require("./utils/sendToken");
 let UsersService = class UsersService {
     constructor(jwtService, prisma, configService, emailService) {
         this.jwtService = jwtService;
@@ -87,12 +88,29 @@ let UsersService = class UsersService {
         return { user, response };
     }
     async login(loginDto) {
-        const { password, email } = loginDto;
-        const user = {
-            email,
-            password,
-        };
-        return user;
+        const { email, password } = loginDto;
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email,
+            },
+        });
+        if (user && (await this.comparePassword(password, user.password))) {
+            const tokenSender = new sendToken_1.TokenSender(this.configService, this.jwtService);
+            return tokenSender.sendToken(user);
+        }
+        else {
+            return {
+                user: null,
+                accessToken: null,
+                refreshToken: null,
+                error: {
+                    message: "Invalid email or password"
+                }
+            };
+        }
+    }
+    async comparePassword(password, hashedPassword) {
+        return await bcrypt.compare(password, hashedPassword);
     }
     async getUsers() {
         return this.prisma.user.findMany();
