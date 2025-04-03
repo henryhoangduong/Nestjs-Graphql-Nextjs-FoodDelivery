@@ -32,7 +32,7 @@ let UserResolvers = class UserResolvers {
     }
     async activateUser(activationDto, context) {
         const user = await this.userService.activateUser(activationDto, context.res);
-        return { user };
+        return { user: user.user };
     }
     async getUsers() {
         return this.userService.getUsers();

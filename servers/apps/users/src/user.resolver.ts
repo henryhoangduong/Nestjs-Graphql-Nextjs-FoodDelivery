@@ -17,11 +17,11 @@ export class UserResolvers {
     if (!registerDto.email || !registerDto.name || !registerDto.password) {
       throw new BadGatewayException("Please fill in all fields");
     }
-    const {activationToken} = await this.userService.register(
+    const { activationToken } = await this.userService.register(
       registerDto,
       context.res,
     );
-    return {activation_token:activationToken.token};
+    return { activation_token: activationToken.token };
   }
   @Mutation(() => ActivationResponse)
   async activateUser(
@@ -32,7 +32,7 @@ export class UserResolvers {
       activationDto,
       context.res,
     );
-    return { user };
+    return { user: user.user };
   }
 
   @Query(() => [User])

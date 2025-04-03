@@ -30,10 +30,9 @@ export class LoginResponse {
 
 @ObjectType()
 export class ActivationResponse {
-  
-  @Field(() => User,{nullable:true})
+  @Field(() => User, { nullable: true })
   user: User | any;
 
-  @Field(() => ErrorType ,{nullable:true})
-  errorType?:ErrorType
+  @Field(() => ErrorType, { nullable: true })
+  errorType?: ErrorType;
 }

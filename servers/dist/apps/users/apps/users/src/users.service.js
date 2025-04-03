@@ -65,7 +65,7 @@ let UsersService = class UsersService {
             secret: this.configService.get("ACTIVATION_SECRET"),
         });
         if (newUser.activationCode !== activationCode) {
-            throw new common_1.BadRequestException("Invalid activation code");
+            throw new Error("Invalid activation code");
         }
         const { name, email, password, phone_number } = newUser.user;
         const existUser = await this.prisma.user.findUnique({
@@ -74,7 +74,7 @@ let UsersService = class UsersService {
             },
         });
         if (existUser) {
-            throw new common_1.BadRequestException("User already exists");
+            throw new Error("User already exists");
         }
         const user = await this.prisma.user.create({
             data: {

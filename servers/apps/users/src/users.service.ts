@@ -66,7 +66,7 @@ export class UsersService {
         secret: this.configService.get<string>("ACTIVATION_SECRET"),
       } as JwtVerifyOptions) as { user: UserData; activationCode: string };
     if (newUser.activationCode !== activationCode) {
-      throw new BadRequestException("Invalid activation code");
+      throw new Error("Invalid activation code");
     }
     const { name, email, password, phone_number } = newUser.user;
     const existUser = await this.prisma.user.findUnique({
@@ -75,7 +75,7 @@ export class UsersService {
       },
     });
     if (existUser) {
-      throw new BadRequestException("User already exists");
+      throw new Error("User already exists");
     }
     const user = await this.prisma.user.create({
       data: {
@@ -87,7 +87,7 @@ export class UsersService {
     });
     return { user, response };
   }
-  
+
   async login(loginDto: LoginDto) {
     const { password, email } = loginDto;
     const user = {
