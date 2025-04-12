@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { NextUiProvider } from "./providers/NextUiProvider";
 
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontSans, poppins } from "@/config/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -37,14 +37,13 @@ export default function RootLayout({
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
+          poppins.variable,
         )}
       >
         <NextUiProvider
           themeProps={{ attribute: "class", defaultTheme: "dark" }}
         >
-          <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-            {children}
-          </main>
+          <main className=" flex-grow">{children}</main>
         </NextUiProvider>
       </body>
     </html>

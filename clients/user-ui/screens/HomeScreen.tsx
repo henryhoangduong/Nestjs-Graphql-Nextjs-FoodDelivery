@@ -4,7 +4,7 @@ import Header from "@/components/layout/Header";
 
 const HomeScreen = () => {
   return (
-    <div>
+    <div className="">
       <Header />
     </div>
   );

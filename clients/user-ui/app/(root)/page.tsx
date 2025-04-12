@@ -4,7 +4,7 @@ import HomeScreen from "@/screens/HomeScreen";
 
 const page = () => {
   return (
-    <div>
+    <div >
       <HomeScreen />
     </div>
   );
