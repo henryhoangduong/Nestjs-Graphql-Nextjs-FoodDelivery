@@ -8,8 +8,11 @@ import {
 } from "@heroui/react";
 import { Avatar } from "@heroui/avatar";
 import { CgProfile } from "react-icons/cg";
+
+import AuthScreen from "@/screens/AuthScreen";
 const ProfileDropDown = () => {
   const [signedIn, setSignedIn] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex items-center gap-4">
@@ -36,7 +39,20 @@ const ProfileDropDown = () => {
           </DropdownMenu>
         </Dropdown>
       ) : (
-        <CgProfile className="text-2xl cursor-pointer" />
+        <CgProfile
+          className="text-2xl cursor-pointer"
+          onClick={() => {
+            setOpen(true);
+          }}
+        />
+      )}
+      {open && (
+        <AuthScreen
+          isOpen={open}
+          onOpenChange={() => {
+            setOpen(!open);
+          }}
+        />
       )}
     </div>
   );
