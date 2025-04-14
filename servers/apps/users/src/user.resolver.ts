@@ -7,7 +7,8 @@ import {
 } from "./types/user.type";
 import { User } from "./entities/user.entity";
 import { ActivationDto, RegisterDto } from "./dto/user.dto";
-import { BadGatewayException } from "@nestjs/common";
+import { BadGatewayException, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "./guards/auth.guard";
 
 @Resolver("User")
 export class UserResolvers {
@@ -39,12 +40,23 @@ export class UserResolvers {
     return { user: user.user };
   }
 
+  @Query(() => LoginResponse)
+  @UseGuards(AuthGuard)
+  async getLoggedInUser(@Context() context: { req: Request }) {
+    return await this.userService.getLoggedInUser(context.req);
+  }
+
+  @Query(() => LoginResponse)
+  @UseGuards(AuthGuard)
+  async logOutUser(@Context() context: { req: Request }) {
+    return await this.userService.Logout(context.req);
+  }
+
   @Mutation(() => LoginResponse)
   async Login(
     @Args("email") email: string,
     @Args("password") password: string,
   ): Promise<LoginResponse> {
-    
     return await this.userService.login({ email, password });
   }
 

@@ -61,6 +61,7 @@ export class UsersService {
     });
     return { activationToken, response };
   }
+
   async activateUser(activationDto: ActivationDto, response: Response) {
     const { activationToken, activationCode } = activationDto;
     const newUser: { user: UserData; activationCode: string } =
@@ -90,7 +91,7 @@ export class UsersService {
     return { user, response };
   }
 
-  async login(loginDto: LoginDto):Promise<LoginResponse> {
+  async login(loginDto: LoginDto): Promise<LoginResponse> {
     const { email, password } = loginDto;
     const user = await this.prisma.user.findUnique({
       where: {
@@ -106,19 +107,34 @@ export class UsersService {
         accessToken: null,
         refreshToken: null,
         error: {
-          message:"Invalid email or password"
-        }
-      }
+          message: "Invalid email or password",
+        },
+      };
     }
   }
+
   async comparePassword(
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
   }
+
   async getUsers(): Promise<User[]> {
     return this.prisma.user.findMany();
+  }
+  async Logout(req: any) {
+    req.user = null;
+    req.refreshToken = null;
+    req.accessToken = null;
+    return { message: "Logged out successfully! " };
+  }
+
+  async getLoggedInUser(req: any) {
+    const user = req.user;
+    const refreshToken = req.refreshToken;
+    const accessToken = req.accessToken;
+    console.log({ user, refreshToken, accessToken });
   }
   async createAvtivationToken(user: UserData) {
     const activationCode = Math.floor(1000 + Math.random() * 9000).toString();

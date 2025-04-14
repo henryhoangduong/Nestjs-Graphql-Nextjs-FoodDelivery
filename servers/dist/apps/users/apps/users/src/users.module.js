@@ -1,10 +1,23 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+var __decorate =
+  (this && this.__decorate) ||
+  function (decorators, target, key, desc) {
+    var c = arguments.length,
+      r =
+        c < 3
+          ? target
+          : desc === null
+            ? (desc = Object.getOwnPropertyDescriptor(target, key))
+            : desc,
+      d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      r = Reflect.decorate(decorators, target, key, desc);
+    else
+      for (var i = decorators.length - 1; i >= 0; i--)
+        if ((d = decorators[i]))
+          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersModule = void 0;
 const common_1 = require("@nestjs/common");
@@ -17,31 +30,33 @@ const Prisma_service_1 = require("../../../prisma/Prisma.service");
 const user_resolver_1 = require("./user.resolver");
 const default_1 = require("@apollo/server/plugin/landingPage/default");
 const email_module_1 = require("./email/email.module");
-let UsersModule = class UsersModule {
-};
+let UsersModule = class UsersModule {};
 exports.UsersModule = UsersModule;
-exports.UsersModule = UsersModule = __decorate([
+exports.UsersModule = UsersModule = __decorate(
+  [
     (0, common_1.Module)({
-        imports: [
-            config_1.ConfigModule.forRoot({
-                isGlobal: true,
-                envFilePath: [".env"],
-            }),
-            graphql_1.GraphQLModule.forRoot({
-                driver: apollo_1.ApolloFederationDriver,
-                plugins: [(0, default_1.ApolloServerPluginLandingPageLocalDefault)()],
-                autoSchemaFile: { federation: 2 },
-                playground: false,
-            }),
-            email_module_1.EmailModule,
-        ],
-        providers: [
-            users_service_1.UsersService,
-            config_1.ConfigService,
-            jwt_1.JwtService,
-            Prisma_service_1.PrismaService,
-            user_resolver_1.UserResolvers,
-        ],
-    })
-], UsersModule);
+      imports: [
+        config_1.ConfigModule.forRoot({
+          isGlobal: true,
+          envFilePath: [".env"],
+        }),
+        graphql_1.GraphQLModule.forRoot({
+          driver: apollo_1.ApolloFederationDriver,
+          plugins: [(0, default_1.ApolloServerPluginLandingPageLocalDefault)()],
+          autoSchemaFile: { federation: 2 },
+          playground: false,
+        }),
+        email_module_1.EmailModule,
+      ],
+      providers: [
+        users_service_1.UsersService,
+        config_1.ConfigService,
+        jwt_1.JwtService,
+        Prisma_service_1.PrismaService,
+        user_resolver_1.UserResolvers,
+      ],
+    }),
+  ],
+  UsersModule,
+);
 //# sourceMappingURL=users.module.js.map
