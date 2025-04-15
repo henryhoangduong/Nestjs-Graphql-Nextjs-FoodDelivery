@@ -46,7 +46,16 @@ const ProfileDropDown = () => {
           }}
         />
       )}
-      {open && (
+      {!open ? (
+        <div
+          className="text-white cursor-pointer"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          Login
+        </div>
+      ) : (
         <AuthScreen
           isOpen={open}
           onOpenChange={() => {
